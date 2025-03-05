@@ -4,11 +4,9 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import logo from '../assets/image5-removebg-preview.png';
 import UserIcon from '../assets/user2.png';
 import { IoSearchSharp } from "react-icons/io5";
+import { navigation } from '../constants/navigation';
 
-export const  navigation = [
-  { label: 'TV Shows', href: '/tv' },
-  { label: 'Movies', href: '/movie' }
-];
+
 const Header = () => {
   const [searchInput, setsearchInput] = useState('');
   const navigate = useNavigate();
