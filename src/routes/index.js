@@ -3,6 +3,7 @@ import App from "../App";
 import Home from "../pages/Home";
 import ExplorerPage from "../pages/ExplorerPage";
 import DetailPage from "../pages/DetailPage";
+import SearchPage from "../pages/SearchPage";
 
 const router = createBrowserRouter([
   {
@@ -18,9 +19,13 @@ const router = createBrowserRouter([
         element: <ExplorerPage />,
       },
       {
-        path: "/detail",
+        path: "/explorer/:id",
         element: <DetailPage />,
       },
+      {
+        path: "Search",
+        element: <SearchPage />,
+      }
     ],
   },
 ]);
