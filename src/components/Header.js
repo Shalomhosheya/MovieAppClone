@@ -1,31 +1,39 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import logo from '../assets/image5-removebg-preview.png';
 import UserIcon from '../assets/user2.png';
 import { IoSearchSharp } from "react-icons/io5";
 
+export const  navigation = [
+  { label: 'TV Shows', href: '/tv' },
+  { label: 'Movies', href: '/movie' }
+];
 const Header = () => {
   const [searchInput, setsearchInput] = useState('');
   const navigate = useNavigate();
 
-  const navigation = [
-    { label: 'TV Shows', href: '/tv' },
-    { label: 'Movies', href: '/movie' }
-  ];
+  
   useEffect(() => {
     navigate(`/search?q=${searchInput}`);
   }, [searchInput])
+
+  const handleSubmit = (e) => {
+   e.preventDefault();
+  }
   return (
     <header className="fixed top-0 w-full h-16 bg-neutral-600 bg-opacity-75">
       <div className="container mx-auto px-2 flex items-center h-full gap-1">
         {/* Logo */}
-        <img 
+
+       <Link>
+       <img 
           src={logo} 
           alt="logo" 
           className="w-23 h-20  rounded-md   shadow-lg transition-transform duration-300 hover:scale-110"
         />
 
+       </Link>
         {/* Navigation */}
         <nav className="hidden lg:flex items-center gap-2 ml-5">
           {navigation.map((nav, index) => (
@@ -43,7 +51,7 @@ const Header = () => {
           <input
             type="text"
             placeholder="Search here..."
-            className="bg-neutral-500 text-white px-4 py-1 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+            className="bg-neutral-500 text-white px-4 py-1 rounded-md focus:outline-none focus:ring focus:ring-blue-300 hidden lg:block"
             onChange={(e) => setsearchInput(e.target.value)}  
             value={searchInput}
           />
