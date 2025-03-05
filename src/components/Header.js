@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from '../assets/image5-removebg-preview.png';
 import UserIcon from '../assets/user2.png';
+import { IoSearchSharp } from "react-icons/io5";
 
 const Header = () => {
   const navigation = [
@@ -30,7 +31,19 @@ const Header = () => {
               {nav.label}
             </NavLink>
           ))}
-        </nav><div className="ml-auto">
+        </nav>
+        <div className="ml-auto flex items-center gap-4">
+          <form>
+            <input
+            type="text"
+            placeholder="Search here..."
+            className="bg-neutral-500 text-white px-4 py-2 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+            />
+          </form>
+         <div className="text-2x1 text-white">
+          <IoSearchSharp/>
+         </div>
+
       <div className="w-15 h-14 rounded-full overflow-hidden cursor-pointer active:scale-50">
        <img 
         src={UserIcon} 
