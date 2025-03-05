@@ -1,18 +1,48 @@
-import React from 'react'
-import logo from '../assets/image5-removebg-preview.png'
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import logo from '../assets/image5-removebg-preview.png';
+import UserIcon from '../assets/user2.png';
+
 const Header = () => {
+  const navigation = [
+    { label: 'TV Shows', href: '/tv' },
+    { label: 'Movies', href: '/movie' }
+  ];
+
   return (
-    <header className='fixed top-0 w-full h-16 bg-neutral-600 bg-opacity-75'>
-        <div className="container mx-auto px-2">
+    <header className="fixed top-0 w-full h-16 bg-neutral-600 bg-opacity-75">
+      <div className="container mx-auto px-2 flex items-center h-full gap-1">
+        {/* Logo */}
         <img 
-         src={logo} 
-         alt="logo" 
-         className="w-50 h-16 rounded-md border-gray-300 shadow-lg transition-transform duration-300 hover:scale-110 fixed top-1 left-4 md:top-0 md:right-6 lg:top-0 lg:left-10"
+          src={logo} 
+          alt="logo" 
+          className="w-23 h-20  rounded-md   shadow-lg transition-transform duration-300 hover:scale-110"
         />
 
-        </div>
-    </header>
-  )
-}
+        {/* Navigation */}
+        <nav className="hidden lg:flex items-center gap-2 ml-5">
+          {navigation.map((nav, index) => (
+            <NavLink 
+              key={nav.label} 
+              to={nav.href} 
+              className={({isActive}) =>`text-white hover:text-blue-400 transition duration-200 px-2 ${isActive && "text-blue-400"}`}
+            >
+              {nav.label}
+            </NavLink>
+          ))}
+        </nav><div className="ml-auto">
+      <div className="w-15 h-14 rounded-full overflow-hidden cursor-pointer active:scale-50">
+       <img 
+        src={UserIcon} 
+        alt="User" 
+        className="w-full h-full object-cover"
+      />
+  </div>
+</div>
 
-export default Header
+      </div>
+    </header>
+  );
+};
+
+export default Header;

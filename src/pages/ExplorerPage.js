@@ -3,7 +3,7 @@ import React from 'react'
 const ExplorerPage = () => {
   return (
     <div>
-      ExplorerPage
+      Explorer Page
     </div>
   )
 }
