@@ -18,8 +18,24 @@ const BannerHome = () => {
                    <div className="absolute top-0  w-full h-full bg-gradient-to-t from-neutral-900 to-transparent">
                     
                    </div>
-                    <div className="absolute bottom-0 w-full px-4 pb-4">
-                        <h1 className="font-bold text-2xl text-white">{data.title}</h1>
+                   <div className="container mx-1">
+                    
+                   <div className="absolute bottom-0 w-full px-4 pb-4">
+                        <h1 className="font-bold text-2xl text-white drop-shadow-2xl">{data.title}</h1>
+                        <p className="text-ellipsis line-clamp-2 text-white my-2">{data.overview}</p>
+                        
+                        <div className="flex items-center gap-4">
+                            <p>
+                                Rating: {Number(data.vote_average).toFixed(1)}+
+                            </p>
+                            <span>!</span>
+                            <p>
+                                View: {Number(data.popularity).toFixed(0)}
+                            </p>
+                            
+                        </div>
+                        <button className="bg-red-500 px-4 py-2 rounded-lg text-white mt-4">Play</button>
+                    </div>
                     </div>
                 </div>
                 
