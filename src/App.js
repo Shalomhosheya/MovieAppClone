@@ -6,7 +6,7 @@ import MobileNav from './components/MobileNav';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useDispatch } from'react-redux';
-import { setBannerData } from './Store/movieSlice';
+import { setBannerData ,setImageURL } from './Store/movieSlice';
 
 function App() {
 
@@ -27,7 +27,9 @@ function App() {
 
     try {
       const response = await axios.get('/configuration');
-      console.log(response.data);
+
+      dispatch(setImageURL(response.data.images.secure_base_url +"original"));
+      console.log("data: "+response.data.images.secure_base_url+"original");
     } catch (error) {
       console.error('Error:', error);
     }
