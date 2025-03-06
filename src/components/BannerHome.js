@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 
@@ -7,15 +7,18 @@ const BannerHome = () => {
     const imageURL = useSelector(state => state.movieData.imageURL);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    if (!bannerData || bannerData.length === 0) return null; // Prevent errors if data is empty
+    useEffect(() => {
+        if (!bannerData || bannerData.length === 0) return; // Ensure bannerData exists
 
-    const handleNext = () => {
-        setCurrentImageIndex(prev => (prev + 1) % bannerData.length); // Loop to first slide
-    };
+        const interval = setInterval(() => {
+            setCurrentImageIndex(prev => (prev + 1) % bannerData.length);
+        }, 2000); // Auto-slide every 2 seconds
 
-    const handlePrev = () => {
-        setCurrentImageIndex(prev => (prev - 1 + bannerData.length) % bannerData.length); // Loop to last slide
-    };
+        return () => clearInterval(interval); // Cleanup on unmount or change
+    }, [bannerData?.length]); // Depend only on length
+
+    // ✅ Now the return statement is AFTER useEffect
+    if (!bannerData || bannerData.length === 0) return null;
 
     return (
         <section className="w-full h-screen relative">
@@ -39,13 +42,13 @@ const BannerHome = () => {
                         {/* Navigation Buttons */}
                         <div className="absolute top-0 left-0 w-full h-full flex items-center justify-between px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <button
-                                onClick={handlePrev}
+                                onClick={() => setCurrentImageIndex(prev => (prev - 1 + bannerData.length) % bannerData.length)}
                                 className="bg-white bg-opacity-10 p-2 rounded-full hover:bg-opacity-20 cursor-pointer"
                             >
                                 <FaAngleLeft className="text-white text-3xl" />
                             </button>
                             <button
-                                onClick={handleNext}
+                                onClick={() => setCurrentImageIndex(prev => (prev + 1) % bannerData.length)}
                                 className="bg-white bg-opacity-10 p-2 rounded-full hover:bg-opacity-20 cursor-pointer"
                             >
                                 <FaAngleRight className="text-white text-3xl" />
