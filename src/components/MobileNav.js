@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 
 const MobileNav = () => {
   return (
-    <section className="lg:hidden h-14 bg-neutral-600 bg-opacity-75 fixed bottom-0 w-full">
+    <section className="lg:hidden h-14 bg-neutral-600 bg-opacity-60 fixed bottom-0 w-full z-40">
       <div className="flex justify-between items-center px-4 text-neutral-400 h-full">
         {mobileNav.map((nav, index) => (
           // Remove the `return` outside and directly return the JSX

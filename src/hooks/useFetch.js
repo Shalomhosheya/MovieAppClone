@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setNowPlayingData } from "../Store/movieSlice.js"; // ✅ Import Redux action
+import { setNowPlayingData } from "../Store/movieSlice.js"; // ✅ Ensure it's imported
 import axios from "axios";
 
 const useFetch = (url) => {
@@ -11,21 +11,35 @@ const useFetch = (url) => {
   const fetchData = async () => {
     try {
       setLoading(true);
+      
+      // ✅ Ensure API key exists
+      const apiKey = process.env.REACT_APP_TMDB_API_KEY;
+      if (!apiKey) {
+        console.error("❌ Missing TMDB API Key. Check .env file.");
+        return;
+      }
+
       const response = await axios.get(url, {
-        params: { api_key: process.env.REACT_APP_TMDB_API_KEY }, // ✅ Use environment variable
+        params: { api_key: apiKey }, 
       });
+
       setLoading(false);
-      setData(response.data.results); // ✅ Update local state
-      dispatch(setNowPlayingData(response.data.results)); // ✅ Store in Redux
+
+      if (response.data && response.data.results) {
+        setData(response.data.results); // ✅ Update local state
+        dispatch(setNowPlayingData(response.data.results)); // ✅ Store in Redux
+      } else {
+        console.error("❌ Invalid API response:", response.data);
+      }
     } catch (error) {
       setLoading(false);
-      console.error("Error fetching data:", error);
+      console.error("❌ Error fetching data:", error);
     }
   };
 
   useEffect(() => {
-    fetchData(); // ✅ Use inline function to avoid missing dependencies
-  }, [url]); // ✅ Add `url` as a dependency
+    fetchData();
+  }, [url]); // ✅ Fetch whenever `url` changes
 
   return { data, loading };
 };
