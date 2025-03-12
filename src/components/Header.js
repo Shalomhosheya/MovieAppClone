@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/image5-removebg-preview.png';
 import UserIcon from '../assets/user2.png';
 import { IoSearchSharp } from "react-icons/io5";
@@ -8,8 +8,11 @@ import { navigation } from '../constants/navigation';
 
 
 const Header = () => {
-  const [searchInput, setsearchInput] = useState('');
+  const loc = useLocation();
+  const removeSpace = loc.search.slice(3).split("%20")?.join(' ');
+  const [searchInput, setsearchInput] = useState(removeSpace);
   const navigate = useNavigate();
+
 
   
   useEffect(() => {

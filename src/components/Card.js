@@ -7,7 +7,10 @@ const Card = ({ data,trending,index }) => {
   const imageURL = useSelector(state => state.movieData.imageURL);
 
   return (
-    <Link to={"/"+data.media_type+"/"+data.id} className='w-full h-full min-w-[250px] max-w-[250px] h-80  block overflow-hidden rounded relative'>
+    <Link to={"/"+data.media_type+"/"+data.id} className='w-full h-full min-w-[250px] max-w-[250px] h-80  block overflow-hidden rounded relative hover:scale-105 transition-transform duration-300'>
+      {
+        
+      }
       <img src={imageURL + data?.poster_path} alt={data.title} />
      <div className='absolute top-0'>
      {
