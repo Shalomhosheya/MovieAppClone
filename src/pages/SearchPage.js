@@ -4,12 +4,14 @@ import { useState, useEffect } from'react'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 import Card from '../components/Card'
+import { useNavigate } from'react-router-dom';
  
 
 const SearchPage = () => {
   const loc = useLocation()
   const[data,setData] = useState([])
   const  [page,setPage]= useState(1)
+  const navigate = useNavigate()
   console.log(loc)
 
   const fetchData = async () => {
@@ -45,9 +47,12 @@ const SearchPage = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [page]);
-  
+
   return (
     <div className='py-16'>
+      <div className='lg:hidden my-2 mx-1 sticky top-16 bg-black bg-opacity-75 z-40'>
+        <input type='text' placeholder='Search' onChange={(e) => navigate(`/search?q=${e.target.value}`)} className='px-4 py-1 text-lg w-full bg-white rounded-full focus:outline-none text-neutral-900' />
+      </div>
       <div className='container mx-auto px-4 py-8'>
         <h2 className='text-2xl font-bold mb-4'>Search Results</h2>
         <div className="grid grid-cols-[repeat(auto-fit,260px)] gap-8 justify-center lg:justify-start">
