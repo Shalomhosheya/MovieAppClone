@@ -17,7 +17,7 @@ const SearchPage = () => {
   const fetchData = async () => {
 
     try {
-      const response = await axios.get(`/search/collection`, {
+      const response = await axios.get(`/search/multi`, {
         params: {
           query:loc?.search?.slice(3),
           page: page,
