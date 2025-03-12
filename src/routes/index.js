@@ -15,18 +15,23 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: ":explorer",
+        path: "explore/:mediaType", // Matches /explore/movie or /explore/tv
         element: <ExplorerPage />,
       },
       {
-        path: ":explorer/:id",
+        path: ":mediaType", // Matches /movie or /tv
+        element: <ExplorerPage />,
+      },
+      {
+        path: ":mediaType/:id", // Matches /movie/123 or /tv/456
         element: <DetailPage />,
       },
       {
-        path: "Search",
+        path: "search",
         element: <SearchPage />,
-      }
+      },
     ],
   },
 ]);
+
 export default router;

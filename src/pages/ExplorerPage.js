@@ -1,36 +1,37 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import Card from "../components/Card";
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import Card from '../components/Card';
 
 const ExplorerPage = () => {
-  const params = useParams();
+  const { mediaType } = useParams(); // Use mediaType instead of explore
   const [pageNo, setPageNo] = useState(1);
-  const [data, setData] = useState([]); // ✅ Stores fetched data
-  const [totalPages, setTotalPages] = useState(0);
+  const [data, setData] = useState([]);
+  const [totalPageNo, setTotalPageNo] = useState(0);
 
-  console.log("Params:", params);
+  console.log('Media Type:', mediaType);
 
   const fetchData = async () => {
+    if (!mediaType) {
+      console.error('Media type is undefined');
+      return;
+    }
+
     try {
-      const response = await axios.get(`/discover/${params.explore}`, {
-        params: { page: pageNo },
+      const response = await axios.get(`/discover/${mediaType}`, {
+        params: {
+          page: pageNo,
+        },
       });
-
-      // ✅ Correctly update data array
-      setData((prev) => [...prev, ...response.data.results]); 
-      setTotalPages(response.data.total_pages);
-
-      console.log("Fetched data:", response.data.results);
+      setData((prevData) => [...prevData, ...response.data.results]);
+      setTotalPageNo(response.data.total_pages);
     } catch (error) {
-      console.error("Fetch error:", error);
+      console.log('error', error);
     }
   };
 
   const handleScroll = () => {
-    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-    
-    if (scrollTop + clientHeight >= scrollHeight - 100 && pageNo < totalPages) {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
       setPageNo((prevPageNo) => prevPageNo + 1);
     }
   };
@@ -40,24 +41,33 @@ const ExplorerPage = () => {
   }, [pageNo]);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    setPageNo(1);
+    setData([]);
+    fetchData();
+  }, [mediaType]); // Add mediaType as a dependency
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   return (
-    <div className="pt-16">
-      <div className="container mx-auto px-4">
-        <h3 className="capitalize text-2xl font-bold">
-          Popular {params.explore}
+    <div className="py-16">
+      <div className="container mx-auto">
+        <h3 className="capitalize text-lg lg:text-xl font-semibold my-3">
+          Popular {mediaType} show
         </h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {data.length > 0 ? (
-            data.map((item) => (
-              <Card key={item.id} data={item} /> // ✅ Fixed duplicate key issue
-            ))
-          ) : (
-            <p className="text-center col-span-full">No data available</p>
-          )}
+
+        <div className="grid grid-cols-[repeat(auto-fit,260px)] gap-8 justify-center lg:justify-start">
+          {data.map((exploreData, index) => (
+            <Card
+              data={exploreData}
+              key={exploreData.id + 'exploreSection'}
+              media_type={mediaType}
+            />
+          ))}
         </div>
       </div>
     </div>
