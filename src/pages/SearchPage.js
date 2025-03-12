@@ -9,6 +9,7 @@ import Card from '../components/Card'
 const SearchPage = () => {
   const loc = useLocation()
   const[data,setData] = useState([])
+  const  [page,setPage]= useState(1)
   console.log(loc)
 
   const fetchData = async () => {
@@ -17,7 +18,7 @@ const SearchPage = () => {
       const response = await axios.get(`/search/collection`, {
         params: {
           query:loc?.search?.slice(3),
-          page: 1,
+          page: page,
         },
       });
       setData((prevData) => [...prevData, ...response.data.results]);
@@ -29,8 +30,22 @@ const SearchPage = () => {
   console.log("location", loc.search.slice(3))
 
   useEffect(() => {
+
+    setData([])
+    setPage(1)
     fetchData()
   }, [loc?.search]);
+
+  const handleScroll = () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      setPage((prevPageNo) => prevPageNo + 1);
+    }
+  };
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [page]);
+  
   return (
     <div className='py-16'>
       <div className='container mx-auto px-4 py-8'>
