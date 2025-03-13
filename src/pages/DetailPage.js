@@ -1,37 +1,57 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useFetchDetails from '../hooks/userFetchDetails';
-import moment from 'moment'; // Ensure moment.js is imported
+import moment from 'moment';
 import Divider from '../components/Divider';
+import VideoPlay from '../components/VideoPlay';
+import HorizontalScollCard from '../components/HorizonScrollCard';
+
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 
 const DetailsPage = () => {
   const params = useParams();
+  
+  // Fetch movie details
   const { data } = useFetchDetails(`/${params?.mediaType}/${params?.id}`);
+  // Fetch cast details
+  const { data: castData } = useFetchDetails(`/${params?.mediaType}/${params?.id}/credits`);
 
-  console.log("Fetched Data:", data);
+  console.log("Movie Data:", data);
+  console.log("Cast Data:", castData);
 
   const [playVideo, setPlayVideo] = useState(false);
   const [playVideoId, setPlayVideoId] = useState("");
 
   const handlePlayVideo = (videoId) => {
+    if (!videoId) {
+      console.error("Invalid video ID");
+      return;
+    }
     setPlayVideoId(videoId);
     setPlayVideo(true);
   };
+  
 
-  // TMDb image base URL
-  const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
+  // Backdrop Image
   const backdropImage = data?.backdrop_path
     ? `${IMAGE_BASE_URL}${data.backdrop_path}`
-    : "https://via.placeholder.com/1280x720?text=No+Image+Available"; // Fallback image
+    : "https://via.placeholder.com/1280x720?text=No+Image+Available";
 
+  // Poster Image
   const posterImage = data?.poster_path
     ? `${IMAGE_BASE_URL}${data.poster_path}`
-    : "https://via.placeholder.com/300x450?text=No+Image+Available"; // Fallback image
+    : "https://via.placeholder.com/300x450?text=No+Image+Available";
 
-  // 🛠 Fixing duration calculation
-  const runtime = data?.runtime || 0; // Default to 0 if runtime is missing
+  // Duration Calculation
+  const runtime = data?.runtime || 0;
   const hours = Math.floor(runtime / 60);
   const minutes = runtime % 60;
+
+  const { data : similarData } = useFetchDetails(`/${params?.explore}/${params?.id}/similar`)//fix
+  const { data : recommendationData } = useFetchDetails(`/${params?.explore}/${params?.id}/recommendations`)//fix this
+  // Get Director and Writer
+  const director = castData?.crew?.find(person => person.job === "Director")?.name || "Unknown";
+  const writer = castData?.crew?.find(person => person.job === "Writer")?.name || "Unknown";
 
   return (
     <div>
@@ -68,7 +88,7 @@ const DetailsPage = () => {
             <span>|</span>
             <p>View: {Number(data?.vote_count)}</p>
             <span>|</span>
-            <p>Duration: {hours}h {minutes}m</p> {/* ✅ Fixed this */}
+            <p>Duration: {hours}h {minutes}m</p>
           </div>
 
           <Divider />
@@ -83,15 +103,52 @@ const DetailsPage = () => {
             <div className="flex items-center gap-3 my-3 text-center">
               <p>Status: {data?.status}</p>
               <span>|</span>
-              <p>Release Date: {moment(data?.release_date).format("MMMM Do YYYY")}</p> {/* ✅ Fixed this */}
+              <p>Release Date: {moment(data?.release_date).format("MMMM Do YYYY")}</p>
               <span>|</span>
-              <p>Revenue: ${Number(data?.revenue).toLocaleString()}</p> {/* ✅ Added formatting */}
+              <p>Revenue: ${Number(data?.revenue).toLocaleString()}</p>
             </div>
 
             <Divider />
           </div>
+
+          {/* Director & Writer */}
+          <div>
+            <p><span className="text-white">Director:</span> {director}</p>
+            <Divider />
+            <p><span className="text-white">Writer:</span> {writer}</p>
+          </div>
+
+          <Divider />
+
+          {/* Cast Section */}
+          <h2 className="font-bold text-lg">Cast :</h2>
+          <div className="grid grid-cols-[repeat(auto-fit,96px)] gap-5 my-4">
+            {castData?.cast?.filter(el => el?.profile_path)?.map((starCast, index) => (
+              <div key={starCast.id}>
+                <div>
+                  <img
+                    src={`${IMAGE_BASE_URL}${starCast?.profile_path}`}
+                    className="w-24 h-24 object-cover rounded-full"
+                    alt={starCast?.name}
+                  />
+                </div>
+                <p className="font-bold text-center text-sm text-neutral-400">{starCast?.name}</p>
+              </div>
+            ))}
+          </div>
+
         </div>
       </div>
+      <div>
+              <HorizontalScollCard data={similarData} heading={"Similar "+params?.mediaType} media_type={params?.mediaType}/>
+              <HorizontalScollCard data={recommendationData} heading={"Recommendation "+params?.mediaType} media_type={params?.mediaType}/>
+      </div>
+
+          {
+            playVideo && (
+              <VideoPlay data={playVideoId} close={()=>setPlayVideo(false)} media_type={params?.explore}/>
+            )
+          }
     </div>
   );
 };

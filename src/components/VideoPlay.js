@@ -1,14 +1,31 @@
-import React from 'react'
+import React from 'react';
 import { IoClose } from "react-icons/io5";
 import useFetchDetails from '../hooks/userFetchDetails';
 
 const VideoPlay = ({ data, close, media_type }) => {
-  const { data: videoData, error } = useFetchDetails(`/${media_type}/${data?.id}/videos`);
+  // Ensure hooks are called first
+  const { data: videoData, error } = useFetchDetails(
+    data && media_type ? `/${media_type}/${data.id}/videos` : null
+  );
 
   const videoKey = videoData?.results?.[0]?.key;
 
+  // Handle invalid data
+  if (!data || !media_type) {
+    return (
+      <section className='fixed bg-black bg-opacity-70 top-0 right-0 bottom-0 left-0 z-50 flex justify-center items-center'>
+        <div className='relative bg-black w-full max-h-[80vh] max-w-screen-lg aspect-video rounded-lg overflow-hidden flex items-center justify-center text-white'>
+          Invalid video data
+          <button onClick={close} className='absolute top-3 right-3 text-white text-4xl hover:text-red-500 transition-all'>
+            <IoClose />
+          </button>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section className='fixed bg-black bg-opacity-70 top-0 right-0 bottom-0 left-0 z-50 flex justify-center items-center'> 
+    <section className='fixed bg-black bg-opacity-70 top-0 right-0 bottom-0 left-0 z-50 flex justify-center items-center'>
       <div className='relative bg-black w-full max-h-[80vh] max-w-screen-lg aspect-video rounded-lg overflow-hidden'>
 
         {/* Close Button */}
