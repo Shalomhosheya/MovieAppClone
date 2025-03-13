@@ -16,6 +16,9 @@ const DetailsPage = () => {
   // Fetch cast details
   const { data: castData } = useFetchDetails(`/${params?.mediaType}/${params?.id}/credits`);
 
+  // https://api.themoviedb.org/3/movie/{movie_id}/recommendations take this as url and add to the horizontal scroll card
+  //https://api.themoviedb.org/3/movie/{movie_id}/similar take this as url and add to the horizontal scroll card
+
   console.log("Movie Data:", data);
   console.log("Cast Data:", castData);
 
