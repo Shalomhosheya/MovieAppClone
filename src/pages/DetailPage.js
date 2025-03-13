@@ -146,7 +146,7 @@ const DetailsPage = () => {
 
           {
             playVideo && (
-              <VideoPlay data={playVideoId} close={()=>setPlayVideo(false)} media_type={params?.explore}/>
+              <VideoPlay data={playVideoId} close={()=>setPlayVideo(false)} media_type={params?.mediaType}/>
             )
           }
     </div>

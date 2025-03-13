@@ -5,6 +5,7 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { setNowPlayingData } from "../Store/movieSlice.js"; // Import action
 import useFetch from "../hooks/useFetch.js"; // Import custom hook
+import useFetchDetails from "../hooks/userFetchDetails.js";
 
 
 export const Home = () => {
