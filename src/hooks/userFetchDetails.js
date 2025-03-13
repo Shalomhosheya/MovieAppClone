@@ -1,24 +1,29 @@
-// src/hooks/useFetchDetails.js
-import { useState, useEffect } from 'react';
+import axios from "axios";
+import { useState, useEffect, useCallback } from "react";
 
-const useFetchDetails = (url) => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
+const BASE_URL = "https://api.themoviedb.org/3";
+const API_KEY = "YOUR_TMDB_API_KEY"; // 🔹 Replace with your actual API key
 
-  useEffect(() => {
-    const fetchData = async () => {
+const useFetchDetails = (endpoint) => {
+  const [data,setData] = useState()
+  const [loading,setLoading] = useState(false)
+
+  const fetchData = async()=>{
       try {
-        const response = await fetch(url);
-        const result = await response.json();
-        setData(result);
+          setLoading(true)
+          const response = await axios.get(endpoint)
+          setLoading(false)
+          setData(response.data)
       } catch (error) {
-        setError(error);
-      }
-    };
-    fetchData();
-  }, [url]);
+          console.log('error',error)
+     }
+  }
 
-  return { data, error };
+  useEffect(()=>{
+      fetchData()
+  },[endpoint])
+
+  return { data , loading}
 };
 
 export default useFetchDetails;
